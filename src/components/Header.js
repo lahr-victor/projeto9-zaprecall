@@ -18,7 +18,7 @@ const Container = styled.div `
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 40px;
 
     img {
         width: 52px;

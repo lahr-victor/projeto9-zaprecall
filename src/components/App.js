@@ -8,14 +8,17 @@ import { Deck } from "./Deck";
 import { Footer } from "./Footer";
 
 export function App() {
+
+  const [answeredQuestionsNumber, setAnsweredQuestionsNumber] = React.useState(0);
+
   return (
     <>
       <ResetStyle />
       <GlobalStyle />
             
       <Header />
-      <Deck />
-      <Footer />
+      <Deck setAnsweredQuestionsNumber={setAnsweredQuestionsNumber} />
+      <Footer answeredQuestionsNumber={answeredQuestionsNumber} />
     </>    
   );
 }
