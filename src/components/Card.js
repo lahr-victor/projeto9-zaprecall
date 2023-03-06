@@ -15,15 +15,9 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
     const [answerResult, setAnswerResult] = React.useState("");
     const [answerIcon, setAnswerIcon] = React.useState(iconPlay);
 
-    function selectCard() {
-        if (!questionAnswered) {
-            setCardSelected(true);
-        }
-    }
-
-    function flipCard() {
-        setCardFlipped(true);
-    }
+    const colorWrong = "#FF3030"
+    const colorAlmost = "#FF922E";
+    const colorCorrect = "#2FBE34";
 
     function selectAnswerResult(result) {
         setAnswerResult(result);
@@ -36,11 +30,11 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
     function selectColor(result) {
         switch (result) {
             case "wrong": 
-                return "#FF3030";
+                return colorWrong;
             case "almost": 
-                return "#FF922E";
+                return colorAlmost;
             case "correct": 
-                return "#2FBE34";
+                return colorCorrect;
             default: 
                 return "#333333";
         }
@@ -62,34 +56,34 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
     if (!cardSelected) {
         return (
             <Container  
-            onClick={selectCard}
-            questionAnswered={questionAnswered}
             cardSelected={cardSelected}
-            answerResult={answerResult}
+            questionAnswered={questionAnswered}
             resultColor={() => selectColor(answerResult)}
             >
                 <h2>Pergunta {questionIndex}</h2>
-                <img src={answerIcon} alt=""></img>
+                <img src={answerIcon} alt="" onClick={!questionAnswered && (() => setCardSelected(true))}></img>
             </Container>
         );
     } else if (!cardFlipped) {
         return (
             <Container
-            onClick={flipCard}
+            cardSelected={cardSelected}
             >
                 <p>{questionText}</p>
-                <img src={iconTurn} alt=""></img>
+                <img src={iconTurn} alt="" onClick={() => setCardFlipped(true)}></img>
             </Container>
         )    
     } else {
         return (
-        <Container>
+        <Container
+        cardSelected={cardSelected}
+        >
             <p>{answerText}</p>
             <div>
-                <button onClick={() => selectAnswerResult("wrong")}>Não lembrei</button>
-                <button onClick={() => selectAnswerResult("almost")}>Quase não lembrei</button>
-                <button onClick={() => selectAnswerResult("correct")}>Zap!</button>
-            </div>            
+                <Answer onClick={() => selectAnswerResult("wrong")} color={colorWrong}>Não lembrei</Answer>
+                <Answer onClick={() => selectAnswerResult("almost")} color={colorAlmost}>Quase não lembrei</Answer>
+                <Answer onClick={() => selectAnswerResult("correct")} color={colorCorrect}>Zap!</Answer>
+            </div>
         </Container>    
         )
     }
@@ -97,17 +91,17 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
 
 const Container = styled.div `
     width: 300px;
-    min-height: ${props => props.cardSelected ? "131px" : "65px"};
+    height: ${props => props.cardSelected ? "180px" : "65px"};
     padding: 15px;
     display: flex;
+    flex-direction: ${props => props.cardSelected ? "column" : "row"};
     justify-content: space-between;
-    align-items: center;
+    align-items: ${props => props.cardSelected ? "left" : "center"};
     background-color: ${props => props.cardSelected ? "#FFFFD4" : "#FFFFFF"};
     border: none;
     border-radius: 5px;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.15);
     margin-bottom: 25px;
-    cursor: pointer;
 
     h2 {
         font-weight: 700;
@@ -116,8 +110,35 @@ const Container = styled.div `
         text-decoration: ${props => props.questionAnswered ? "line-through" : "none"};
     }
 
+    p {
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 22px;
+        color: #333333;
+    }
+
     img {
         width: 20px;
         height: auto;
+        cursor: ${props => props.questionAnswered ? "initial" : "pointer"};
+        align-self: ${props => props.cardSelected && "flex-end"};
     }
+
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+`
+
+const Answer = styled.button `
+    width: 80px;
+    height: 40px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 12px;
+    color: #FFFFFF;
+    padding: 0 10px;
+    background-color: ${props => props.color};
 `
