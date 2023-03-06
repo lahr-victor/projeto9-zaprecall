@@ -8,6 +8,7 @@ export function Deck({answeredQuestionsNumber, setAnsweredQuestionsNumber}) {
         <Container>
             {cards.map((card, index) => (
                 <Card
+                key={index}
                 questionIndex={index + 1}
                 questionText={card.question} 
                 answerText={card.answer}

@@ -4,7 +4,7 @@ import cards from "../cards";
 
 export function Footer({answeredQuestionsNumber}) {
     return (
-        <Container>
+        <Container data-test="footer">
             <h3>{answeredQuestionsNumber}/{cards.length} CONCLUÍDOS</h3>
         </Container>
     );

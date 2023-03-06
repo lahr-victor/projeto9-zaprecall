@@ -12,8 +12,7 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
     const [questionAnswered, setQuestionAnswered] = React.useState(false);
     const [cardSelected, setCardSelected] = React.useState(false);    
     const [cardFlipped, setCardFlipped] = React.useState(false);
-    const [answerResult, setAnswerResult] = React.useState("");
-    const [answerIcon, setAnswerIcon] = React.useState(iconPlay);
+    const [answerResult, setAnswerResult] = React.useState(undefined);
 
     const colorWrong = "#FF3030"
     const colorAlmost = "#FF922E";
@@ -21,10 +20,9 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
 
     function selectAnswerResult(result) {
         setAnswerResult(result);
-        setAnswerIcon(selectIcon(result));
         setAnsweredQuestionsNumber(answeredQuestionsNumber + 1);
         setQuestionAnswered(true);
-        setCardSelected(false);        
+        setCardSelected(false);
     }
 
     function selectColor(result) {
@@ -53,36 +51,77 @@ export function Card({questionIndex, questionText, answerText, answeredQuestions
         }
     }
 
+    function selectIconDataTest(result) {
+        switch (result) {
+            case "wrong": 
+                return "no-icon";
+            case "almost": 
+                return "partial-icon";
+            case "correct": 
+                return "zap-icon";
+            default: 
+                return "play-btn";
+        }
+    }
+
     if (!cardSelected) {
         return (
-            <Container  
+            <Container data-test="flashcard"
             cardSelected={cardSelected}
             questionAnswered={questionAnswered}
             resultColor={() => selectColor(answerResult)}
             >
-                <h2>Pergunta {questionIndex}</h2>
-                <img src={answerIcon} alt="" onClick={!questionAnswered && (() => setCardSelected(true))}></img>
+                <h2 data-test="flashcard-text">Pergunta {questionIndex}</h2>
+                <img 
+                src={selectIcon(answerResult)} 
+                alt="" 
+                onClick={!questionAnswered ? () => setCardSelected(true) : undefined}
+                data-test={selectIconDataTest(answerResult)}
+                />
             </Container>
         );
     } else if (!cardFlipped) {
         return (
-            <Container
+            <Container data-test="flashcard"
             cardSelected={cardSelected}
             >
-                <p>{questionText}</p>
-                <img src={iconTurn} alt="" onClick={() => setCardFlipped(true)}></img>
+                <p data-test="flashcard-text">{questionText}</p>
+                <img 
+                src={iconTurn} 
+                alt="" 
+                onClick={() => setCardFlipped(true)}
+                data-test="turn-btn"
+                />
             </Container>
         )    
     } else {
         return (
-        <Container
+        <Container data-test="flashcard"
         cardSelected={cardSelected}
         >
-            <p>{answerText}</p>
+            <p data-test="flashcard-text">{answerText}</p>
             <div>
-                <Answer onClick={() => selectAnswerResult("wrong")} color={colorWrong}>Não lembrei</Answer>
-                <Answer onClick={() => selectAnswerResult("almost")} color={colorAlmost}>Quase não lembrei</Answer>
-                <Answer onClick={() => selectAnswerResult("correct")} color={colorCorrect}>Zap!</Answer>
+                <Result 
+                color={colorWrong}
+                onClick={() => selectAnswerResult("wrong")} 
+                data-test="no-btn"
+                >
+                    Não lembrei
+                </Result>
+                <Result
+                color={colorAlmost} 
+                onClick={() => selectAnswerResult("almost")} 
+                data-test="partial-btn"
+                >
+                    Quase não lembrei
+                </Result>
+                <Result 
+                color={colorCorrect}
+                onClick={() => selectAnswerResult("correct")}
+                data-test="zap-btn"
+                >
+                    Zap!
+                </Result>
             </div>
         </Container>    
         )
@@ -131,7 +170,7 @@ const Container = styled.div `
     }
 `
 
-const Answer = styled.button `
+const Result = styled.button `
     width: 80px;
     height: 40px;
     cursor: pointer;
