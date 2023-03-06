@@ -17,7 +17,10 @@ export function App() {
       <GlobalStyle />
             
       <Header />
-      <Deck setAnsweredQuestionsNumber={setAnsweredQuestionsNumber} />
+      <Deck 
+      answeredQuestionsNumber={answeredQuestionsNumber}
+      setAnsweredQuestionsNumber={setAnsweredQuestionsNumber} 
+      />
       <Footer answeredQuestionsNumber={answeredQuestionsNumber} />
     </>    
   );

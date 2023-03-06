@@ -1,16 +1,17 @@
+import styled from "styled-components";
+
 import { Card } from "./Card";
 import cards from "../cards";
 
-import styled from "styled-components";
-
-export function Deck(setAnsweredQuestionsNumber) {
+export function Deck({answeredQuestionsNumber, setAnsweredQuestionsNumber}) {
     return (
         <Container>
             {cards.map((card, index) => (
                 <Card
                 questionIndex={index + 1}
                 questionText={card.question} 
-                answer={card.answer}
+                answerText={card.answer}
+                answeredQuestionsNumber={answeredQuestionsNumber}
                 setAnsweredQuestionsNumber={setAnsweredQuestionsNumber}
                 />  
             ))}

@@ -1,6 +1,6 @@
-import cards from "../cards";
-
 import styled from "styled-components";
+
+import cards from "../cards";
 
 export function Footer({answeredQuestionsNumber}) {
     return (
